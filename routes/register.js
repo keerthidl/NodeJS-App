@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const id = require('shortid');
 
+/**
+ * @description Create a new User 
+ */
 router.post("/add",(req,res)=>{
     var user = {
         user_id: id.generate(),
@@ -40,7 +43,9 @@ router.post("/add",(req,res)=>{
             }) 
 })
 
-// SHOW ADD USER FORM
+/**
+ * @description render the registration form 
+ */
 router.get('/add', function(req, res, next){	
 	// render to views/user/add.ejs
 	res.render('user/add', {
@@ -54,7 +59,8 @@ router.get('/add', function(req, res, next){
 })
 
 /**
- * LIST OF USERS 
+ * @http://localhost:3000/
+ * @description to reterive registered users from the  database  
  */
  router.get('/', function(req, res) {
     db.query('SELECT * FROM register')
@@ -67,7 +73,7 @@ router.get('/add', function(req, res, next){
 })
 
 /**
- * LOGIN
+ * @description render the Login page 
  */
 router.get("/login",(req,res)=>{
     console.log('login page:')
@@ -78,6 +84,9 @@ router.get("/login",(req,res)=>{
     })
 })
 
+/**
+ * @description Login to app only for registered user 
+ */
 router.post("/login",(req,res)=>{
     console.log("check1")
     // let email = req.body.email;
@@ -115,7 +124,9 @@ router.post("/login",(req,res)=>{
     })
 })
 
-// SHOW EDIT USER FORM
+/**
+ * @description reterive the user data based on userid and populate in the edit form 
+ */
 router.get('/edit/:user_id', function(req, res, next){
     db.query('SELECT * FROM register WHERE user_id = $1',[req.params.user_id])
     .then(result =>{
@@ -138,11 +149,9 @@ router.get('/edit/:user_id', function(req, res, next){
     })
 })
 
-// const list = (req, data) =>{
-//    db.query('SELECT * FROM register')
-   
-// }
-
+/**
+ * @description Update the user data
+ */
 router.put("/edit/:user_id",(req,res)=>{
     let user = [       
         req.body.name,
@@ -169,6 +178,9 @@ router.put("/edit/:user_id",(req,res)=>{
     })
 })
 
+/**
+ * @description Delete the user data based on the user id 
+ */
 router.delete("/delete/:user_id",(req,res)=>{
     db.query('DELETE FROM register WHERE user_id = $1',[req.params.user_id])
     .then(result =>{
